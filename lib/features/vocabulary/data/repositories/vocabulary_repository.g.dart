@@ -6,36 +6,92 @@ part of 'vocabulary_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$vocabularyRepositoryHash() =>
-    r'139c3bb11f58336e6cc09cd3024f5a7ec807eca9';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [vocabularyRepository].
 @ProviderFor(vocabularyRepository)
-final vocabularyRepositoryProvider =
-    AutoDisposeProvider<VocabularyRepository>.internal(
-  vocabularyRepository,
-  name: r'vocabularyRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$vocabularyRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final vocabularyRepositoryProvider = VocabularyRepositoryProvider._();
 
-typedef VocabularyRepositoryRef = AutoDisposeProviderRef<VocabularyRepository>;
-String _$allWordsHash() => r'4348489ece77ac1ef62ed428dcdf1084c03e46e9';
+final class VocabularyRepositoryProvider
+    extends
+        $FunctionalProvider<
+          VocabularyRepository,
+          VocabularyRepository,
+          VocabularyRepository
+        >
+    with $Provider<VocabularyRepository> {
+  VocabularyRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'vocabularyRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [allWords].
+  @override
+  String debugGetCreateSourceHash() => _$vocabularyRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<VocabularyRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  VocabularyRepository create(Ref ref) {
+    return vocabularyRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(VocabularyRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<VocabularyRepository>(value),
+    );
+  }
+}
+
+String _$vocabularyRepositoryHash() =>
+    r'e067fec27a7a9bd018a8c125f56e7d29dc0b8975';
+
 @ProviderFor(allWords)
-final allWordsProvider = AutoDisposeFutureProvider<List<WordModel>>.internal(
-  allWords,
-  name: r'allWordsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$allWordsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final allWordsProvider = AllWordsProvider._();
 
-typedef AllWordsRef = AutoDisposeFutureProviderRef<List<WordModel>>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+final class AllWordsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<WordModel>>,
+          List<WordModel>,
+          FutureOr<List<WordModel>>
+        >
+    with $FutureModifier<List<WordModel>>, $FutureProvider<List<WordModel>> {
+  AllWordsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allWordsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allWordsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<WordModel>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<WordModel>> create(Ref ref) {
+    return allWords(ref);
+  }
+}
+
+String _$allWordsHash() => r'13f7962a6b3a4da83e3bcf08aaaa7477f60fb4a1';

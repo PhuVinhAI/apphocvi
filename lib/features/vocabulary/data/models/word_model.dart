@@ -4,7 +4,7 @@ part 'word_model.freezed.dart';
 part 'word_model.g.dart';
 
 @freezed
-class WordModel with _$WordModel {
+abstract class WordModel with _$WordModel {
   const factory WordModel({
     @JsonKey(name: '_id') String? id,
     required String word,

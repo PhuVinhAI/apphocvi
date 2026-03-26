@@ -39,12 +39,12 @@ class VocabularyRepository {
 }
 
 @riverpod
-VocabularyRepository vocabularyRepository(VocabularyRepositoryRef ref) {
+VocabularyRepository vocabularyRepository(Ref ref) {
   return VocabularyRepository();
 }
 
 @riverpod
-Future<List<WordModel>> allWords(AllWordsRef ref) async {
+Future<List<WordModel>> allWords(Ref ref) async {
   final repo = ref.watch(vocabularyRepositoryProvider);
   return repo.loadAllWords();
 }
