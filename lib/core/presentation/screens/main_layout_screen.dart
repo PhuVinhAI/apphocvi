@@ -19,29 +19,24 @@ class MainLayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTokens.background,
+      backgroundColor: AppTokens.surface, // Pure white background
       body: navigationShell,
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: AppTokens.surface,
           border: Border(
-            top: BorderSide(color: AppTokens.surfaceVariant, width: 1),
+            top: BorderSide(color: AppTokens.surfaceVariant, width: 1.5), // Subtle line, no shadow
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x0D000000),
-              blurRadius: 12,
-              offset: Offset(0, -2),
-            ),
-          ],
         ),
         padding: const EdgeInsets.only(
           left: AppTokens.spaceSm,
           right: AppTokens.spaceSm,
-          top: AppTokens.spaceXs,
+          top: AppTokens.spaceSm,
           bottom: AppTokens.spaceSm,
         ),
-        child: Row(
+        child: SafeArea(
+          top: false,
+          child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavItem(
@@ -52,7 +47,7 @@ class MainLayoutScreen extends StatelessWidget {
             ),
             _buildNavItem(
               context: context,
-              icon: LucideIcons.dumbbell,
+              icon: LucideIcons.search,
               label: 'Practice',
               index: 1,
             ),
@@ -64,7 +59,8 @@ class MainLayoutScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
+        ), // Close SafeArea
+      ), // Close Container
     );
   }
 
@@ -81,36 +77,35 @@ class MainLayoutScreen extends StatelessWidget {
         onTap: () => _onTap(index),
         behavior: HitTestBehavior.opaque,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(
             horizontal: AppTokens.spaceMd,
-            vertical: AppTokens.spaceXs,
+            vertical: AppTokens.spaceSm,
           ),
           decoration: BoxDecoration(
             color: isActive
-                ? const Color(0x1F2563EB)
+                ? AppTokens.textPrimary // Solid high contrast pill when active
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppTokens.radiusLg),
+            borderRadius: BorderRadius.circular(AppTokens.radiusFull),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 icon,
-                size: 22,
+                size: 24,
                 color: isActive
-                    ? AppTokens.primary
+                    ? AppTokens.surface // White icon inside black pill
                     : AppTokens.textTertiary,
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: AppTokens.spaceXs),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                style: AppTokens.textXs.copyWith(
+                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                   color: isActive
-                      ? AppTokens.primary
+                      ? AppTokens.surface
                       : AppTokens.textTertiary,
                 ),
               ),

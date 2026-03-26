@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_styles.dart';
@@ -14,18 +15,18 @@ class VocabularyListScreen extends ConsumerWidget {
     final groupedWordsAsync = ref.watch(groupedWordsProvider);
 
     return Scaffold(
-      backgroundColor: AppTokens.background,
+      backgroundColor: AppTokens.surface, // Pure white background
       appBar: AppBar(
-        title: const Text(
-          'Vocabulary Courses',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          'Courses',
+          style: AppStyles.h2(),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppTokens.surface,
         elevation: 0,
         scrolledUnderElevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.refreshCw, color: Colors.black87),
+            icon: const Icon(LucideIcons.refreshCw, color: AppTokens.textPrimary),
             onPressed: () => ref.invalidate(groupedWordsProvider),
           )
         ],
@@ -36,122 +37,87 @@ class VocabularyListScreen extends ConsumerWidget {
             return Center(
               child: Text(
                 'No vocabulary data available.',
-                style: AppTokens.textSm.copyWith(
-                  color: AppTokens.textTertiary,
-                ),
+                style: AppTokens.textBase.copyWith(color: AppTokens.textTertiary),
               ),
             );
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: AppTokens.spaceLg, vertical: AppTokens.spaceMd),
             itemCount: groupedWords.keys.length,
             itemBuilder: (context, levelIndex) {
               final level = groupedWords.keys.elementAt(levelIndex);
               final topics = groupedWords[level]!;
 
-              return Padding(
-                padding: const EdgeInsets.only(bottom: AppTokens.space2xl),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Level $level', style: AppStyles.h2()),
-                    const SizedBox(height: 16),
-                    ...topics.entries.map((topicEntry) {
-                      final topic = topicEntry.key;
-                      final words = topicEntry.value;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppTokens.spaceXl, bottom: AppTokens.spaceMd),
+                    child: Text('Level $level', style: AppStyles.h1()),
+                  ),
+                  ...topics.entries.map((topicEntry) {
+                    final topic = topicEntry.key;
+                    final words = topicEntry.value;
 
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: AppTokens.spaceLg,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(topic, style: AppStyles.h3()),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              height: 120,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: words.length,
-                                clipBehavior: Clip.none,
-                                itemBuilder: (context, wordIndex) {
-                                  final word = words[wordIndex];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: AppTokens.spaceMd,
-                                      top: AppTokens.spaceXs,
-                                      bottom: AppTokens.spaceXs,
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Selected: ${word.word}',
-                                            ),
-                                            behavior:
-                                                SnackBarBehavior.floating,
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        width: 140,
-                                        padding: const EdgeInsets.all(
-                                          AppTokens.spaceMd,
-                                        ),
-                                        decoration: AppStyles.vocabCard(),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              word.word,
-                                              style:
-                                                  AppTokens.textXl.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: AppTokens.primary,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: AppTokens.spaceSm,
-                                            ),
-                                            Text(
-                                              word.definition,
-                                              style:
-                                                  AppTokens.textSm.copyWith(
-                                                color:
-                                                    AppTokens.textSecondary,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                              maxLines: 2,
-                                              overflow:
-                                                  TextOverflow.ellipsis,
-                                            ),
-                                          ],
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: AppTokens.space2xl),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(topic, style: AppStyles.h3().copyWith(color: AppTokens.primary)),
+                          const SizedBox(height: AppTokens.spaceLg),
+                          Wrap(
+                            spacing: AppTokens.spaceMd,
+                            runSpacing: AppTokens.spaceMd,
+                            children: words.map((word) {
+                              return GestureDetector(
+                                onTap: () => context.go('/vocab/detail', extra: word),
+                                behavior: HitTestBehavior.opaque,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppTokens.spaceLg,
+                                    vertical: AppTokens.spaceMd,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppTokens.background, // Light gray fill
+                                    borderRadius: BorderRadius.circular(AppTokens.radiusFull), // Pill shape
+                                    border: Border.all(color: AppTokens.surfaceVariant),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        word.word,
+                                        style: AppTokens.textLg.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppTokens.textPrimary,
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                ),
+                                      const SizedBox(width: AppTokens.spaceSm),
+                                      Text(
+                                        word.definition,
+                                        style: AppTokens.textSm.copyWith(
+                                          color: AppTokens.textSecondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
               );
             },
           );
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFF2563EB),
-          ),
+          child: CircularProgressIndicator(color: AppTokens.primary),
         ),
         error: (error, stack) => Center(
           child: Text(

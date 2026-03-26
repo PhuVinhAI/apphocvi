@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'core/router/app_router.dart';
+import 'core/theme/app_tokens.dart';
 
 void main() {
   runApp(const ProviderScope(child: MainApp()));
@@ -15,9 +17,10 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'AppHocVi',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppTokens.primary),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF1F5F9),
+        scaffoldBackgroundColor: AppTokens.background,
+        textTheme: GoogleFonts.outfitTextTheme(),
       ),
       routerConfig: appRouter,
     );

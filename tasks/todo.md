@@ -7,12 +7,12 @@
 - [x] Refactor vocabulary_list_screen với theme mới
 
 ## Phase 2: File Structure & Learning Flow Design
-- [ ] Tạo vocabulary_detail_screen (word overview + start learning button)
-- [ ] Tạo flashcard_learning_screen (swipeable flashcards)
-- [ ] Tạo example_sentences_screen (sentences với audio)
-- [ ] Tạo quiz_multi_choice_screen
-- [ ] Tạo quiz_fill_blank_screen
-- [ ] Tạo learning_complete_screen (summary + progress)
+- [x] Tạo vocabulary_detail_screen (word overview + start learning button)
+- [x] Tạo flashcard_learning_screen (swipeable flashcards)
+- [x] Tạo example_sentences_screen (sentences với audio)
+- [x] Tạo quiz_multi_choice_screen
+- [x] Tạo quiz_fill_blank_screen
+- [x] Tạo learning_complete_screen (summary + progress)
 
 ## Phase 3: Learning Flow State Management
 - [ ] Create learning_session_provider (track current word, progress)
@@ -35,7 +35,7 @@
 7. **Complete Screen** - Summary, score, "Learn Next Word" button
 
 ## Notes
-- Using Mix 2.0 for all styling ✅
+- Using pure Flutter for all styling ✅ (Mix 2.0 removed)
 - Following Clean Architecture pattern
 - Data structure remains unchanged (WordModel)
 - Focus on minimal, clean UI

@@ -10,13 +10,10 @@ class PracticeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTokens.background,
+      backgroundColor: AppTokens.surface,
       appBar: AppBar(
-        title: const Text(
-          'Practice',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Colors.white,
+        title: Text('Practice', style: AppStyles.h2()),
+        backgroundColor: AppTokens.surface,
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
@@ -27,14 +24,12 @@ class PracticeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                LucideIcons.dumbbell,
-                size: 64,
-                color: AppTokens.textTertiary,
+                LucideIcons.search,
+                size: 80,
+                color: AppTokens.surfaceVariant,
               ),
-              const SizedBox(height: AppTokens.spaceMd),
-              Text('Practice Mode', style: AppStyles.h2()),
-              const SizedBox(height: AppTokens.spaceMd),
-              Text('Coming soon...', style: AppStyles.bodySecondary()),
+              const SizedBox(height: AppTokens.space2xl),
+              Text('Coming soon...', style: AppStyles.h3().copyWith(color: AppTokens.textSecondary)),
             ],
           ),
         ),

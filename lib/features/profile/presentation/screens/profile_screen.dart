@@ -10,13 +10,10 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTokens.background,
+      backgroundColor: AppTokens.surface,
       appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Colors.white,
+        title: Text('Profile', style: AppStyles.h2()),
+        backgroundColor: AppTokens.surface,
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
@@ -26,15 +23,23 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                LucideIcons.userCircle,
-                size: 64,
-                color: AppTokens.textTertiary,
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: AppTokens.surfaceVariant,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  LucideIcons.user,
+                  size: 64,
+                  color: AppTokens.textTertiary,
+                ),
               ),
+              const SizedBox(height: AppTokens.space2xl),
+              Text('Demo User', style: AppStyles.h1()),
               const SizedBox(height: AppTokens.spaceMd),
-              Text('Profile', style: AppStyles.h2()),
-              const SizedBox(height: AppTokens.spaceMd),
-              Text('Coming soon...', style: AppStyles.bodySecondary()),
+              Text('user@demo.com', style: AppStyles.bodySecondary()),
             ],
           ),
         ),

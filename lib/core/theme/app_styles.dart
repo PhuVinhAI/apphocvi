@@ -2,76 +2,60 @@ import 'package:flutter/material.dart';
 
 import 'app_tokens.dart';
 
-/// Reusable component styles cho toàn app - Flutter thuần
+/// Reusable component styles cho toàn app - Flat Design Mobile (No Cards)
 class AppStyles {
   AppStyles._();
 
-  // ============ CARD STYLES ============
+  // ============ BRANDING & UI ELEMENTS ============
 
-  /// Card cơ bản - white background, rounded, shadow
-  static BoxDecoration card() => BoxDecoration(
+  /// Subtle container background instead of floating cards
+  static BoxDecoration flatSurface() => BoxDecoration(
         color: AppTokens.surface,
         borderRadius: BorderRadius.circular(AppTokens.radiusLg),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: AppTokens.surfaceVariant, width: 1.5),
       );
 
-  /// Vocabulary card decoration
-  static BoxDecoration vocabCard() => BoxDecoration(
-        color: AppTokens.surface,
-        borderRadius: BorderRadius.circular(AppTokens.radiusXl),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
+  /// Primary action flat button background
+  static BoxDecoration primaryAction() => BoxDecoration(
+        color: AppTokens.primary,
+        borderRadius: BorderRadius.circular(AppTokens.radiusFull),
       );
 
   // ============ TEXT STYLES ============
 
-  /// Heading 1
   static TextStyle h1() => AppTokens.text3xl.copyWith(
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w800,
         color: AppTokens.textPrimary,
+        height: 1.1,
+        letterSpacing: -1.0,
       );
 
-  /// Heading 2
   static TextStyle h2() => AppTokens.text2xl.copyWith(
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         color: AppTokens.textPrimary,
+        letterSpacing: -0.5,
       );
 
-  /// Heading 3
   static TextStyle h3() => AppTokens.textXl.copyWith(
         fontWeight: FontWeight.w600,
         color: AppTokens.textPrimary,
       );
 
-  /// Body text
   static TextStyle body() => AppTokens.textBase.copyWith(
         color: AppTokens.textPrimary,
       );
 
-  /// Body secondary
   static TextStyle bodySecondary() => AppTokens.textBase.copyWith(
         color: AppTokens.textSecondary,
       );
 
-  /// Caption
   static TextStyle caption() => AppTokens.textSm.copyWith(
         color: AppTokens.textTertiary,
       );
 
-  /// Label
   static TextStyle label() => AppTokens.textSm.copyWith(
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
         color: AppTokens.textSecondary,
+        letterSpacing: 0.5,
       );
 }
