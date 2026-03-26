@@ -9,6 +9,16 @@ This skill ensures you write correct Mix 2.0 code. Mix separates style semantics
 
 **This is a rigid skill.** Follow the documented patterns exactly. Do not guess at method names or API shapes — read the relevant reference file first.
 
+## Reference Files Location
+
+All Mix reference documentation is located in `docs/mix-references/`:
+- `docs/mix-references/styling.md` — Colors, padding, borders, sizing, gradients, shadows
+- `docs/mix-references/variants.md` — Hover, press, focus, dark/light mode, responsive
+- `docs/mix-references/animations.md` — Implicit, phase, and keyframe animations
+- `docs/mix-references/tokens.md` — Design tokens, theming, MixScope
+- `docs/mix-references/widgets.md` — Box, FlexBox, StyledText, StyledIcon, Pressable
+- `docs/mix-references/examples.md` — Complete working examples and patterns
+
 ## Core Principles
 
 These rules apply to ALL Mix code you write:
@@ -75,14 +85,14 @@ Before writing Mix code, **read the relevant reference file(s)** based on what t
 
 | User is asking about... | Read this reference |
 |---|---|
-| Styling a widget: colors, padding, borders, sizing, gradients, shadows | `references/styling.md` |
-| Hover, press, focus, dark/light mode, responsive, disabled, selected | `references/variants.md` |
-| Animations, transitions, keyframes, spring physics, phases | `references/animations.md` |
-| Design tokens, theming, MixScope, token types | `references/tokens.md` |
-| Which widget to use, Box vs FlexBox, layout, Pressable | `references/widgets.md` |
-| Need a full working example or pattern reference | `references/examples.md` |
+| Styling a widget: colors, padding, borders, sizing, gradients, shadows | `docs/mix-references/styling.md` |
+| Hover, press, focus, dark/light mode, responsive, disabled, selected | `docs/mix-references/variants.md` |
+| Animations, transitions, keyframes, spring physics, phases | `docs/mix-references/animations.md` |
+| Design tokens, theming, MixScope, token types | `docs/mix-references/tokens.md` |
+| Which widget to use, Box vs FlexBox, layout, Pressable | `docs/mix-references/widgets.md` |
+| Need a full working example or pattern reference | `docs/mix-references/examples.md` |
 
-**How to use references:** Read the file with the Read tool, then follow the patterns and API tables in it. The references contain real, verified method signatures and code examples extracted from the Mix codebase.
+**How to use references:** Read the file with the readFile tool, then follow the patterns and API tables in it. The references contain real, verified method signatures and code examples extracted from the Mix codebase.
 
 ## Style Composition
 
