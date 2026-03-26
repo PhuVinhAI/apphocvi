@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/theme/app_tokens.dart';
 import '../../data/models/word_model.dart';
+import '../providers/learning_session_provider.dart';
 
-class VocabularyDetailScreen extends StatelessWidget {
+class VocabularyDetailScreen extends ConsumerWidget {
   final WordModel word;
 
   const VocabularyDetailScreen({super.key, required this.word});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppTokens.surface, // Pure white
       appBar: AppBar(
@@ -121,6 +123,7 @@ class VocabularyDetailScreen extends StatelessWidget {
           height: 64,
           child: ElevatedButton(
             onPressed: () {
+              ref.read(learningSessionProvider.notifier).startSession(word);
               context.push('/vocab/flashcard', extra: word);
             },
             style: ElevatedButton.styleFrom(

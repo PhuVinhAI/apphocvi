@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/theme/app_tokens.dart';
 import '../../data/models/word_model.dart';
+import '../providers/audio_player_provider.dart';
 
-class ExampleSentencesScreen extends StatelessWidget {
+class ExampleSentencesScreen extends ConsumerWidget {
   final WordModel word;
 
   const ExampleSentencesScreen({super.key, required this.word});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bool hasExamples = word.exampleSentences.isNotEmpty;
 
     return Scaffold(
@@ -65,6 +67,8 @@ class ExampleSentencesScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return _buildFlatExampleItem(
                           context,
+                          ref,
+                          index,
                           sentence: word.exampleSentences[index],
                           translation: word.exampleSentencesTranslated.length > index
                               ? word.exampleSentencesTranslated[index]
@@ -113,7 +117,9 @@ class ExampleSentencesScreen extends StatelessWidget {
   }
 
   Widget _buildFlatExampleItem(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref,
+    int index, {
     required String sentence,
     String? translation,
     String? breakdown,
@@ -139,10 +145,24 @@ class ExampleSentencesScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(LucideIcons.volume2),
               color: AppTokens.primary,
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Playing example audio...')),
-                );
+              onPressed: () async {
+                if (word.exampleSentencesAudioUrls.length > index) {
+                  final url = word.exampleSentencesAudioUrls[index];
+                  try {
+                    await ref.read(audioPlayerProvider).setUrl(url);
+                    ref.read(audioPlayerProvider).play();
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Audio stream not available for this example')),
+                      );
+                    }
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No audio link provided for this example')),
+                  );
+                }
               },
             ),
           ],

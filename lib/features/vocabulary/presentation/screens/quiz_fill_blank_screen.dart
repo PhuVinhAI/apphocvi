@@ -1,24 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/theme/app_tokens.dart';
 import '../../data/models/word_model.dart';
+import '../providers/learning_session_provider.dart';
 
-class QuizFillBlankScreen extends StatefulWidget {
+class QuizFillBlankScreen extends ConsumerStatefulWidget {
   final WordModel word;
 
   const QuizFillBlankScreen({super.key, required this.word});
 
   @override
-  State<QuizFillBlankScreen> createState() => _QuizFillBlankScreenState();
+  ConsumerState<QuizFillBlankScreen> createState() => _QuizFillBlankScreenState();
 }
 
-class _QuizFillBlankScreenState extends State<QuizFillBlankScreen> {
+class _QuizFillBlankScreenState extends ConsumerState<QuizFillBlankScreen> {
   final TextEditingController _controller = TextEditingController();
   bool _isSubmitted = false;
   bool _isCorrect = false;
+  
+  late String _sentence;
+  late String _correctAnswer;
+
+  @override
+  void initState() {
+    super.initState();
+    _sentence = "____ là một từ rất hay.";
+    _correctAnswer = widget.word.word;
+    
+    final fq = widget.word.fillBlankQuiz;
+    if (fq != null && fq.isNotEmpty) {
+       _sentence = fq['question']?.toString() ?? fq['sentence']?.toString() ?? _sentence;
+       _correctAnswer = fq['correctAnswer']?.toString() ?? fq['answer']?.toString() ?? widget.word.word;
+    } else if (widget.word.exampleSentences.isNotEmpty) {
+      final String original = widget.word.exampleSentences.first;
+      _sentence = original.replaceAll(RegExp(widget.word.word, caseSensitive: false), '____');
+    }
+  }
 
   @override
   void dispose() {
@@ -27,26 +48,33 @@ class _QuizFillBlankScreenState extends State<QuizFillBlankScreen> {
   }
 
   void _submit() {
-    if (_controller.text.isEmpty || _isSubmitted) return;
+    if (_isSubmitted) {
+      if (mounted) context.push('/vocab/complete', extra: widget.word);
+      return;
+    }
+    if (_controller.text.isEmpty) return;
     
     setState(() {
       _isSubmitted = true;
-      _isCorrect = _controller.text.trim().toLowerCase() == widget.word.word.toLowerCase();
+      _isCorrect = _controller.text.trim().toLowerCase() == _correctAnswer.toLowerCase();
     });
     
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        context.push('/vocab/complete', extra: widget.word);
-      }
-    });
+    ref.read(learningSessionProvider.notifier).recordAnswer(_isCorrect);
   }
 
   @override
   Widget build(BuildContext context) {
-    String sentence = "____ là một từ rất hay.";
-    if (widget.word.exampleSentences.isNotEmpty) {
-      final String original = widget.word.exampleSentences.first;
-      sentence = original.replaceAll(RegExp(widget.word.word, caseSensitive: false), '____');
+    // Dynamic floating button styling based on state
+    Color btnColor = AppTokens.textPrimary;
+    Color btnTextColor = AppTokens.surface;
+    String btnText = 'Check Answer';
+    
+    if (_isSubmitted) {
+      btnColor = _isCorrect ? AppTokens.success : AppTokens.error;
+      btnText = 'Next';
+    } else if (_controller.text.isEmpty) {
+      btnColor = AppTokens.surfaceVariant;
+      btnTextColor = AppTokens.textTertiary;
     }
 
     return Scaffold(
@@ -90,7 +118,7 @@ class _QuizFillBlankScreenState extends State<QuizFillBlankScreen> {
                     ),
                     const SizedBox(height: AppTokens.space2xl),
                     Text(
-                      sentence,
+                      _sentence,
                       style: AppTokens.text3xl.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTokens.textPrimary,
@@ -122,6 +150,13 @@ class _QuizFillBlankScreenState extends State<QuizFillBlankScreen> {
                           borderRadius: BorderRadius.circular(AppTokens.radiusFull),
                           borderSide: const BorderSide(color: AppTokens.primary, width: 2),
                         ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTokens.radiusFull),
+                          borderSide: BorderSide(
+                            color: _isSubmitted ? (_isCorrect ? AppTokens.success : AppTokens.error) : AppTokens.surfaceVariant, 
+                            width: 2
+                          ),
+                        ),
                         suffixIcon: _isSubmitted
                             ? Padding(
                                 padding: const EdgeInsets.only(right: AppTokens.spaceLg),
@@ -133,40 +168,64 @@ class _QuizFillBlankScreenState extends State<QuizFillBlankScreen> {
                               )
                             : null,
                       ),
-                      style: AppTokens.text2xl.copyWith(fontWeight: FontWeight.bold, color: AppTokens.textPrimary),
+                      style: AppTokens.text2xl.copyWith(
+                        fontWeight: FontWeight.bold, 
+                        color: _isSubmitted ? (_isCorrect ? AppTokens.success : AppTokens.error) : AppTokens.textPrimary
+                      ),
                       textAlign: TextAlign.center,
                       onChanged: (value) => setState(() {}),
                       onSubmitted: (_) => _submit(),
                     ),
+                    
+                    if (_isSubmitted && !_isCorrect) ...[
+                      const SizedBox(height: AppTokens.spaceLg),
+                      Text(
+                        'Correct answer: $_correctAnswer',
+                        style: AppTokens.textLg.copyWith(
+                          color: AppTokens.success,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                    
+                    const SizedBox(height: 100), // Spacing for floating button
                   ],
                 ),
               ),
             ),
-
-            // Flat Bottom Action
-            Container(
-              padding: const EdgeInsets.all(AppTokens.spaceLg),
-              decoration: const BoxDecoration(
-                border: Border(top: BorderSide(color: AppTokens.surfaceVariant)),
-              ),
-              child: ElevatedButton(
-                onPressed: _controller.text.isNotEmpty && !_isSubmitted ? _submit : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTokens.textPrimary,
-                  foregroundColor: AppTokens.surface,
-                  disabledBackgroundColor: AppTokens.surfaceVariant,
-                  disabledForegroundColor: AppTokens.textTertiary,
-                  padding: const EdgeInsets.symmetric(vertical: AppTokens.spaceLg),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTokens.radiusFull)),
-                  elevation: 0,
-                ),
-                child: Text(
-                  _isSubmitted ? 'Checking...' : 'Check Answer',
-                  style: AppTokens.textLg.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppTokens.spaceXl),
+        child: SizedBox(
+          width: double.infinity,
+          height: 64,
+          child: ElevatedButton(
+            onPressed: (_controller.text.isNotEmpty) ? _submit : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: btnColor,
+              foregroundColor: btnTextColor,
+              disabledBackgroundColor: AppTokens.surfaceVariant,
+              disabledForegroundColor: AppTokens.textTertiary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTokens.radiusFull)),
+              elevation: 0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  btnText,
+                  style: AppTokens.textXl.copyWith(fontWeight: FontWeight.bold),
+                ),
+                if (_isSubmitted) ...[
+                  const SizedBox(width: AppTokens.spaceMd),
+                  const Icon(LucideIcons.arrowRight),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );

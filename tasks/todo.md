@@ -15,15 +15,15 @@
 - [x] Tạo learning_complete_screen (summary + progress)
 
 ## Phase 3: Learning Flow State Management
-- [ ] Create learning_session_provider (track current word, progress)
-- [ ] Create audio_player_provider (play example sentences)
-- [ ] Create quiz_state_provider (track answers, score)
+- [x] Create learning_session_provider (track current word, progress)
+- [x] Create audio_player_provider (play example sentences)
+- [x] Create quiz_state_provider (track answers, score)
 
 ## Phase 4: Navigation & Integration
-- [ ] Update router với routes mới
-- [ ] Implement navigation flow: List → Detail → Flashcard → Examples → Quizzes → Complete
-- [ ] Add back navigation và progress indicator
-- [ ] Test complete flow end-to-end
+- [x] Update router với routes mới
+- [x] Implement navigation flow: List → Detail → Flashcard → Examples → Quizzes → Complete
+- [x] Add back navigation và progress indicator
+- [ ] Test complete flow end-to-end (Sau khi ghép state)
 
 ## Learning Flow Design:
 1. **List Screen** (hiện tại) - Browse words by level/topic

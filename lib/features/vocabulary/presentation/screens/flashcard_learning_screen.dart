@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_tokens.dart';
 import '../../data/models/word_model.dart';
@@ -151,90 +150,51 @@ class _FlashcardLearningScreenState extends State<FlashcardLearningScreen> with 
   }
 
   Widget _buildBackContent() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Padding(
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppTokens.space2xl),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // The word (As a reminder pill on top)
+          Center(
+            child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppTokens.space2xl,
-                vertical: AppTokens.space2xl,
+                horizontal: AppTokens.spaceLg,
+                vertical: AppTokens.spaceSm,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // The word (As a reminder pill on top)
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppTokens.spaceLg,
-                        vertical: AppTokens.spaceSm,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(AppTokens.radiusFull),
-                      ),
-                      child: Text(
-                        widget.word.word,
-                        style: AppTokens.textBase.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppTokens.space2xl),
-
-                  // Main Translation / Definition
-                  Text(
-                    widget.word.definition,
-                    style: AppTokens.text3xl.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 48,
-                      height: 1.2,
-                      letterSpacing: -1.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  if (widget.word.notes != null && widget.word.notes!.isNotEmpty) ...[
-                    const SizedBox(height: 60), // Generous spacing before notes
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(LucideIcons.lightbulb, color: Colors.white70, size: 20),
-                        const SizedBox(width: AppTokens.spaceSm),
-                        Text(
-                          'NOTES',
-                          style: AppTokens.textSm.copyWith(
-                            color: Colors.white70,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppTokens.spaceMd),
-                    Text(
-                      widget.word.notes!,
-                      style: AppTokens.textXl.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ],
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(AppTokens.radiusFull),
+              ),
+              child: Text(
+                widget.word.word,
+                style: AppTokens.textBase.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  letterSpacing: 1.0,
+                ),
               ),
             ),
           ),
-        );
-      },
+          const SizedBox(height: AppTokens.space2xl),
+
+          // Main Translation / Definition
+          Text(
+            widget.word.definition,
+            style: AppTokens.text3xl.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 48,
+              height: 1.2,
+              letterSpacing: -1.0,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

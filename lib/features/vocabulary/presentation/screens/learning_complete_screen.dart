@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_tokens.dart';
 import '../../data/models/word_model.dart';
+import '../providers/learning_session_provider.dart';
 
-class LearningCompleteScreen extends StatelessWidget {
+class LearningCompleteScreen extends ConsumerWidget {
   final WordModel word;
 
   const LearningCompleteScreen({super.key, required this.word});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sessionState = ref.watch(learningSessionProvider);
+    final String xpStr = '+${sessionState.xpGained}';
+    final String accStr = '${(sessionState.accuracy * 100).toStringAsFixed(0)}%';
+
     return Scaffold(
       backgroundColor: AppTokens.success, // Bold green flat background
       body: SafeArea(
@@ -64,9 +70,9 @@ class LearningCompleteScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildFlatStatItem('XP Gained', '+15', LucideIcons.zap),
+                  _buildFlatStatItem('XP Gained', xpStr, LucideIcons.zap),
                   Container(width: 1, height: 60, color: Colors.white.withValues(alpha: 0.3)),
-                  _buildFlatStatItem('Accuracy', '100%', LucideIcons.target),
+                  _buildFlatStatItem('Accuracy', accStr, LucideIcons.target),
                 ],
               ),
             ),
