@@ -19,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: const Text('Hồ sơ cá nhân'),
+        title: const Text('Profile'),
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -30,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
           style: FlexBoxStyler().mainAxisSize(MainAxisSize.min).spacing(16).crossAxisAlignment(CrossAxisAlignment.center),
           children: [
             StyledIcon(icon: LucideIcons.userCircle, style: iconStyle),
-            StyledText('Tính năng đang phát triển', style: textStyle),
+            StyledText('Feature in development', style: textStyle),
           ],
         ),
       ),

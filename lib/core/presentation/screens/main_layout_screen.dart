@@ -41,13 +41,13 @@ class MainLayoutScreen extends StatelessWidget {
             _buildNavItem(
               context: context,
               icon: LucideIcons.bookOpen,
-              label: 'Từ vựng',
+              label: 'Vocabulary',
               index: 0,
             ),
             _buildNavItem(
               context: context,
               icon: LucideIcons.user,
-              label: 'Hồ sơ',
+              label: 'Profile',
               index: 1,
             ),
           ],

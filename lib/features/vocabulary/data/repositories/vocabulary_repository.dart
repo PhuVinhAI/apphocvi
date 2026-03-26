@@ -48,3 +48,17 @@ Future<List<WordModel>> allWords(Ref ref) async {
   final repo = ref.watch(vocabularyRepositoryProvider);
   return repo.loadAllWords();
 }
+
+@riverpod
+Future<Map<String, Map<String, List<WordModel>>>> groupedWords(Ref ref) async {
+  final words = await ref.watch(allWordsProvider.future);
+  final grouped = <String, Map<String, List<WordModel>>>{};
+
+  for (final word in words) {
+    grouped.putIfAbsent(word.level, () => {});
+    grouped[word.level]!.putIfAbsent(word.topic, () => []);
+    grouped[word.level]![word.topic]!.add(word);
+  }
+
+  return grouped;
+}
