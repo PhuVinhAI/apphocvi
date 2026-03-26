@@ -12,7 +12,7 @@ lib/
 │   │       └── main_layout_screen.dart  # Bottom navigation layout
 │   ├── router/
 │   │   └── app_router.dart        # GoRouter configuration
-│   ├── theme/                      # Theme system (Mix 2.0)
+│   ├── theme/                      # Design system (Flutter thuần)
 │   │   ├── app_tokens.dart        # Design tokens (colors, spacing, typography, radius)
 │   │   └── app_styles.dart        # Reusable component styles
 │   └── utils/                      # Utility functions
@@ -41,6 +41,7 @@ lib/
 │       │   ├── entities/
 │       │   └── repositories/
 │       └── presentation/
+│           ├── controllers/
 │           └── screens/
 │               └── vocabulary_list_screen.dart
 │
@@ -75,42 +76,47 @@ assets/
 
 ### State Management
 - **Riverpod**: For state management and dependency injection
+- **Riverpod Generator** (`@riverpod`): Code generation cho providers
 
 ### Routing
 - **GoRouter**: Declarative routing with StatefulShellRoute for bottom navigation
 
-## Theme System (Mix 2.0)
+### Data Models
+- **Freezed**: Immutable data classes với code generation
+- **JSON Serializable**: Tự động parse JSON
+
+## Theme System (Flutter thuần)
 
 ### Design Tokens (`app_tokens.dart`)
-Centralized design tokens for consistent styling:
+Centralized design tokens dùng plain Dart constants:
 
 ```dart
-// Color tokens
-AppTokens.primary
-AppTokens.primaryLight
-AppTokens.primaryDark
-AppTokens.surface
-AppTokens.background
-AppTokens.textPrimary
-AppTokens.textSecondary
-AppTokens.textTertiary
+// Color tokens — static const Color
+AppTokens.primary        // Color(0xFF2563EB)
+AppTokens.primaryLight   // Color(0xFF60A5FA)
+AppTokens.primaryDark    // Color(0xFF1E40AF)
+AppTokens.surface        // Colors.white
+AppTokens.background     // Color(0xFFF1F5F9)
+AppTokens.textPrimary    // Color(0xFF0F172A)
+AppTokens.textSecondary  // Color(0xFF475569)
+AppTokens.textTertiary   // Color(0xFF94A3B8)
 
-// Space tokens
-AppTokens.spaceXs  // 4px
-AppTokens.spaceSm  // 8px
-AppTokens.spaceMd  // 16px
-AppTokens.spaceLg  // 24px
-AppTokens.spaceXl  // 32px
-AppTokens.space2xl // 48px
+// Space tokens — static const double
+AppTokens.spaceXs  // 4.0
+AppTokens.spaceSm  // 8.0
+AppTokens.spaceMd  // 16.0
+AppTokens.spaceLg  // 24.0
+AppTokens.spaceXl  // 32.0
+AppTokens.space2xl // 48.0
 
-// Radius tokens
-AppTokens.radiusSm   // 4px
-AppTokens.radiusMd   // 8px
-AppTokens.radiusLg   // 12px
-AppTokens.radiusXl   // 16px
-AppTokens.radiusFull // 9999px
+// Radius tokens — static const double
+AppTokens.radiusSm   // 4.0
+AppTokens.radiusMd   // 8.0
+AppTokens.radiusLg   // 12.0
+AppTokens.radiusXl   // 16.0
+AppTokens.radiusFull // 9999.0
 
-// Typography tokens
+// Typography tokens — static const TextStyle
 AppTokens.textXs   // 12px
 AppTokens.textSm   // 14px
 AppTokens.textBase // 16px
@@ -121,20 +127,14 @@ AppTokens.text3xl  // 30px
 ```
 
 ### Component Styles (`app_styles.dart`)
-Reusable component styles:
+Reusable styles trả về Flutter types:
 
 ```dart
-// Cards
+// Cards — trả về BoxDecoration
 AppStyles.card()
-AppStyles.cardInteractive()
 AppStyles.vocabCard()
 
-// Buttons
-AppStyles.buttonPrimary()
-AppStyles.buttonSecondary()
-AppStyles.iconButton()
-
-// Typography
+// Typography — trả về TextStyle
 AppStyles.h1()
 AppStyles.h2()
 AppStyles.h3()
@@ -142,27 +142,35 @@ AppStyles.body()
 AppStyles.bodySecondary()
 AppStyles.caption()
 AppStyles.label()
-
-// Layout
-AppStyles.screenPadding()
-AppStyles.section()
 ```
 
 ### Usage Example
 
 ```dart
-// Using tokens directly
-final style = BoxStyler()
-    .color(AppTokens.surface())
-    .paddingAll(AppTokens.spaceMd())
-    .borderRadiusAll(AppTokens.radiusLg());
+// Tokens dùng trực tiếp trong Flutter widgets
+Container(
+  padding: const EdgeInsets.all(AppTokens.spaceMd),
+  decoration: BoxDecoration(
+    color: AppTokens.surface,
+    borderRadius: BorderRadius.circular(AppTokens.radiusLg),
+  ),
+  child: content,
+)
 
-// Using component styles
-final cardStyle = AppStyles.card();
-Box(style: cardStyle, child: content);
+// Component styles
+Container(
+  decoration: AppStyles.card(),
+  child: content,
+)
 
-// Using typography
-StyledText('Hello', style: AppStyles.h1());
+// Typography
+Text('Hello', style: AppStyles.h1())
+
+// Extend từ token
+Text('Detail', style: AppTokens.textSm.copyWith(
+  color: AppTokens.textSecondary,
+  fontWeight: FontWeight.w500,
+))
 ```
 
 ## Navigation Structure
@@ -208,15 +216,30 @@ WordModel {
 }
 ```
 
+## Key Dependencies
+
+| Package | Purpose |
+|---|---|
+| `flutter_riverpod` | State management |
+| `riverpod_annotation` | Riverpod code generation |
+| `go_router` | Declarative routing |
+| `freezed_annotation` | Immutable data models |
+| `json_annotation` | JSON serialization |
+| `google_fonts` | Typography |
+| `lucide_icons` | Icon set |
+| `flutter_animate` | Animations |
+| `equatable` | Value equality |
+| `path_provider` | File system paths |
+
 ## Key Features
 
 ### Implemented
-- ✅ Theme system with Mix 2.0
-- ✅ Design tokens for consistent styling
+- ✅ Design token system (Flutter thuần)
+- ✅ Reusable component styles (BoxDecoration, TextStyle)
 - ✅ Bottom navigation with 3 tabs
 - ✅ Vocabulary list screen (grouped by level/topic)
-- ✅ Vocabulary data loading from JSON
-- ✅ Responsive card layout with hover effects
+- ✅ Vocabulary data loading from bundled JSON assets
+- ✅ Horizontal scrolling vocab cards
 
 ### Planned
 - 🔄 Vocabulary detail screen
@@ -230,42 +253,9 @@ WordModel {
 
 ## Styling Guidelines
 
-### Mix 2.0 Rules
-1. Always use Mix widgets (Box, StyledText, StyledIcon) instead of Flutter primitives
-2. Define styles as variables, not inline
-3. Use tokens for all styling values (colors, spacing, etc.)
-4. Tokens can only be used INSIDE Mix widgets, not Flutter widgets
-5. For Flutter widgets (Scaffold, etc.), use hardcoded colors
-
-### Example
-```dart
-// ✅ Correct - Mix widget with tokens
-Box(
-  style: BoxStyler()
-      .color(AppTokens.surface())
-      .paddingAll(AppTokens.spaceMd()),
-  child: content,
-)
-
-// ❌ Wrong - Flutter widget with tokens
-Scaffold(
-  backgroundColor: AppTokens.background(), // Error!
-)
-
-// ✅ Correct - Flutter widget with hardcoded color
-Scaffold(
-  backgroundColor: const Color(0xFFF1F5F9),
-)
-```
-
-## Development Notes
-
-### Token Limitations
-- ColorToken references cannot use `.withOpacity()` directly
-- Must resolve tokens first or use hardcoded colors with alpha channel
-- Example: `const Color(0x1F2563EB)` instead of `AppTokens.primary().withOpacity(0.12)`
-
-### Animation Considerations
-- Avoid scale/transform animations with Mix to prevent Matrix4Tween errors
-- Prefer color and opacity animations
-- Use `.animate(.easeInOut(250.ms))` for smooth transitions
+1. Dùng Flutter widgets tiêu chuẩn (`Container`, `Text`, `Icon`, `Column`, `Row`, etc.)
+2. Luôn dùng `AppTokens` cho colors, spacing, radius — không hardcode giá trị rải rác
+3. Dùng `AppStyles` cho các component styles lặp lại (card, typography)
+4. Extend từ token bằng `.copyWith()` khi cần tuỳ chỉnh thêm
+5. Dùng `AnimatedContainer` cho transition animations
+6. Dùng `GestureDetector` hoặc `InkWell` cho interactive elements

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:mix/mix.dart';
 
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/theme/app_tokens.dart';
@@ -10,17 +9,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final containerStyle = BoxStyler()
-        .color(AppTokens.background())
-        .paddingAll(AppTokens.spaceLg())
-        .alignment(Alignment.center);
-
-    final iconStyle = IconStyler()
-        .size(64)
-        .color(AppTokens.textTertiary());
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F5F9),
+      backgroundColor: AppTokens.background,
       appBar: AppBar(
         title: const Text(
           'Profile',
@@ -30,24 +20,23 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
-      body: Box(
-        style: containerStyle,
-        child: ColumnBox(
-          style: FlexBoxStyler()
-              .mainAxisAlignment(.center)
-              .crossAxisAlignment(.center)
-              .gap(AppTokens.spaceMd()),
-          children: [
-            StyledIcon(icon: LucideIcons.userCircle, style: iconStyle),
-            StyledText(
-              'Profile',
-              style: AppStyles.h2(),
-            ),
-            StyledText(
-              'Coming soon...',
-              style: AppStyles.bodySecondary(),
-            ),
-          ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppTokens.spaceLg),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                LucideIcons.userCircle,
+                size: 64,
+                color: AppTokens.textTertiary,
+              ),
+              const SizedBox(height: AppTokens.spaceMd),
+              Text('Profile', style: AppStyles.h2()),
+              const SizedBox(height: AppTokens.spaceMd),
+              Text('Coming soon...', style: AppStyles.bodySecondary()),
+            ],
+          ),
         ),
       ),
     );
