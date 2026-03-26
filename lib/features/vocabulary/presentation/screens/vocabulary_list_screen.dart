@@ -3,58 +3,53 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:mix/mix.dart';
 
+import '../../../../core/theme/app_styles.dart';
+import '../../../../core/theme/app_tokens.dart';
 import '../../data/repositories/vocabulary_repository.dart';
 
-class TestVocabScreen extends ConsumerWidget {
-  const TestVocabScreen({super.key});
+class VocabularyListScreen extends ConsumerWidget {
+  const VocabularyListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final groupedWordsAsync = ref.watch(groupedWordsProvider);
 
-    // --- Styling Mix ---
+    // --- Styling với AppStyles và AppTokens ---
     final centerStyle = BoxStyler().alignment(Alignment.center);
-    final errorTextStyle = TextStyler().color(Colors.red.shade700).fontSize(16);
+    
+    final errorTextStyle = TextStyler()
+        .color(AppTokens.error())
+        .style(AppTokens.textBase.mix());
 
-    final metaTextStyle = TextStyler().color(Colors.grey.shade500).fontSize(14);
+    final metaTextStyle = TextStyler()
+        .color(AppTokens.textTertiary())
+        .style(AppTokens.textSm.mix());
 
-    final levelHeaderStyle = TextStyler()
-        .fontSize(24)
-        .fontWeight(FontWeight.bold)
-        .color(Colors.black87);
+    final levelHeaderStyle = AppStyles.h2();
 
-    final topicHeaderStyle = TextStyler()
-        .fontSize(18)
-        .fontWeight(FontWeight.w600)
-        .color(Colors.grey.shade700);
+    final topicHeaderStyle = AppStyles.h3();
 
-    final cardStyle = BoxStyler()
-        .color(Colors.white)
-        .width(140)
-        .paddingAll(16)
-        .marginOnly(right: 16, bottom: 8, top: 4)
-        .borderRounded(16)
-        .shadowOnly(color: Colors.black12, blurRadius: 4, offset: const Offset(0, 2))
-        .animate(.easeInOut(200.ms))
-        .onHovered(BoxStyler().color(Colors.blue.shade50).shadowOnly(color: Colors.black26, blurRadius: 8, offset: const Offset(0, 4)))
-        .onPressed(BoxStyler().color(Colors.blue.shade100));
+    final cardStyle = AppStyles.vocabCard();
 
     final wordStyle = TextStyler()
-        .fontSize(22)
+        .style(AppTokens.textXl.mix())
         .fontWeight(FontWeight.bold)
-        .color(Colors.blue.shade700);
+        .color(AppTokens.primary());
 
     final defStyle = TextStyler()
-        .fontSize(14)
-        .color(Colors.grey.shade600)
+        .style(AppTokens.textSm.mix())
+        .color(AppTokens.textSecondary())
         .textAlign(TextAlign.center)
         .maxLines(2)
         .overflow(TextOverflow.ellipsis);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: const Color(0xFFF1F5F9),
       appBar: AppBar(
-        title: const Text('Vocabulary Courses', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: const Text(
+          'Vocabulary Courses',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -70,7 +65,10 @@ class TestVocabScreen extends ConsumerWidget {
           if (groupedWords.isEmpty) {
             return Box(
               style: centerStyle,
-              child: StyledText('No vocabulary data available.', style: metaTextStyle),
+              child: StyledText(
+                'No vocabulary data available.',
+                style: metaTextStyle,
+              ),
             );
           }
 
@@ -82,7 +80,9 @@ class TestVocabScreen extends ConsumerWidget {
               final topics = groupedWords[level]!;
 
               return ColumnBox(
-                style: FlexBoxStyler().crossAxisAlignment(.start).marginOnly(bottom: 32),
+                style: FlexBoxStyler()
+                    .crossAxisAlignment(.start)
+                    .marginBottom(AppTokens.space2xl()),
                 children: [
                   StyledText('Level $level', style: levelHeaderStyle),
                   const SizedBox(height: 16),
@@ -92,10 +92,12 @@ class TestVocabScreen extends ConsumerWidget {
                     final words = topicEntry.value;
 
                     return ColumnBox(
-                      style: FlexBoxStyler().crossAxisAlignment(.start).marginOnly(bottom: 24),
+                      style: FlexBoxStyler()
+                          .crossAxisAlignment(.start)
+                          .marginBottom(AppTokens.spaceLg()),
                       children: [
                         StyledText(topic, style: topicHeaderStyle),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 8),
                         SizedBox(
                           height: 120,
                           child: ListView.builder(
@@ -105,7 +107,10 @@ class TestVocabScreen extends ConsumerWidget {
                             itemBuilder: (context, wordIndex) {
                               final word = words[wordIndex];
                               return PressableBox(
-                                style: cardStyle,
+                                style: cardStyle
+                                    .marginRight(AppTokens.spaceMd())
+                                    .marginBottom(AppTokens.spaceXs())
+                                    .marginTop(AppTokens.spaceXs()),
                                 onPress: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -118,7 +123,7 @@ class TestVocabScreen extends ConsumerWidget {
                                   style: FlexBoxStyler()
                                       .mainAxisAlignment(.center)
                                       .crossAxisAlignment(.center)
-                                      .spacing(8),
+                                      .gap(AppTokens.spaceSm()),
                                   children: [
                                     StyledText(word.word, style: wordStyle),
                                     StyledText(word.definition, style: defStyle),
@@ -136,10 +141,17 @@ class TestVocabScreen extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator(color: Colors.blue)),
+        loading: () => const Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFF2563EB),
+          ),
+        ),
         error: (error, stack) => Box(
           style: centerStyle,
-          child: StyledText('Error loading data:\n$error', style: errorTextStyle),
+          child: StyledText(
+            'Error loading data:\n$error',
+            style: errorTextStyle,
+          ),
         ),
       ),
     );

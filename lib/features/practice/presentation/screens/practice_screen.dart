@@ -5,8 +5,8 @@ import 'package:mix/mix.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/theme/app_tokens.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class PracticeScreen extends StatelessWidget {
+  const PracticeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF1F5F9),
       appBar: AppBar(
         title: const Text(
-          'Profile',
+          'Practice',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
@@ -38,9 +38,9 @@ class ProfileScreen extends StatelessWidget {
               .crossAxisAlignment(.center)
               .gap(AppTokens.spaceMd()),
           children: [
-            StyledIcon(icon: LucideIcons.userCircle, style: iconStyle),
+            StyledIcon(icon: LucideIcons.dumbbell, style: iconStyle),
             StyledText(
-              'Profile',
+              'Practice Mode',
               style: AppStyles.h2(),
             ),
             StyledText(
